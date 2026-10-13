@@ -1,4 +1,6 @@
 fhand = open('mbox-short.txt')
-inp = fhand.read()
-print(len(inp))
-print(inp[:20])
+for line in fhand:
+    line = line.rstrip()
+    if line.find('@uct.ac.za') == -1: continue
+    print(line)
+    
