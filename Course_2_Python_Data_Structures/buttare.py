@@ -1,7 +1,4 @@
-largest = None
-print("Before", largest)
-for itervar in [3, 41, 12, 9, 74, 15]:
-    if largest == None or itervar > largest:
-        largest = itervar
-    print("Loop", itervar, largest)
-print("The largest is :", largest)
+fhand = open('mbox-short.txt')
+inp = fhand.read()
+print(len(inp))
+print(inp[:20])
