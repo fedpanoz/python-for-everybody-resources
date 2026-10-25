@@ -9,10 +9,11 @@ for line in handle:
         c = line.split()
         d = c[5]
         e = d.split(':')
-        print(e[0])
-
-
-
-
+        #print(e[0])
+        f = e[0]
+        dizio[f] = dizio.get(f, 0) + 1
+#print(dizio)
+for ho, val in sorted(dizio.items()):
+    print(ho, val)
 
   
