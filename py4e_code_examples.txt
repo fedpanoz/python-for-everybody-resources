@@ -1,0 +1,422 @@
+# ==============================================================================
+# RACCOLTA DEGLI ESEMPI DI CODICE - PYTHON FOR EVERYBODY (PY4E)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 1: Introduzione (words.py)
+# Contare la parola più frequente in un file di testo
+# Fonte: http://www.py4e.com/code3/words.py
+# ------------------------------------------------------------------------------
+name = input('Enter file:')
+handle = open(name, 'r')
+counts = dict()
+
+for line in handle:
+    words = line.split()
+    for word in words:
+        counts[word] = counts.get(word, 0) + 1
+
+bigcount = None
+bigword = None
+for word, count in list(counts.items()):
+    if bigcount is None or count > bigcount:
+        bigword = word
+        bigcount = count
+
+print(bigword, bigcount)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 5: Iterazione (copytildone2.py)
+# Ciclo while con continue e break
+# Fonte: http://www.py4e.com/code3/copytildone2.py
+# ------------------------------------------------------------------------------
+while True:
+    line = input('> ')
+    if line[0] == '#':
+        continue
+    if line == 'done':
+        break
+    print(line)
+print('Done!')
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 7: File (open.py)
+# Contare le righe di un file
+# Fonte: http://www.py4e.com/code3/open.py
+# ------------------------------------------------------------------------------
+fhand = open('mbox-short.txt')
+count = 0
+for line in fhand:
+    count = count + 1
+print('Line Count:', count)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 7: Leggere l'intero file con .read()
+# ------------------------------------------------------------------------------
+fhand = open('mbox-short.txt')
+inp = fhand.read()
+print(len(inp))
+print(inp[:20])
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 7: Cercare in un file (search1.py)
+# Fonte: http://www.py4e.com/code3/search1.py
+# ------------------------------------------------------------------------------
+fhand = open('mbox-short.txt')
+for line in fhand:
+    if line.startswith('From:'):
+        print(line)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 7: Cercare in un file rimuovendo newline con rstrip() (search2.py)
+# Fonte: http://www.py4e.com/code3/search2.py
+# ------------------------------------------------------------------------------
+fhand = open('mbox-short.txt')
+for line in fhand:
+    line = line.rstrip()
+    if line.startswith('From:'):
+        print(line)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 7: Saltare le righe non interessanti con continue (search3.py)
+# Fonte: http://www.py4e.com/code3/search3.py
+# ------------------------------------------------------------------------------
+fhand = open('mbox-short.txt')
+for line in fhand:
+    line = line.rstrip()
+    # Skip 'uninteresting lines'
+    if not line.startswith('From:'):
+        continue
+    # Process our 'interesting' line
+    print(line)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 7: Far scegliere il nome del file all'utente (search6.py)
+# Fonte: http://www.py4e.com/code3/search6.py
+# ------------------------------------------------------------------------------
+fname = input('Enter the file name: ')
+fhand = open(fname)
+count = 0
+for line in fhand:
+    if line.startswith('Subject:'):
+        count = count + 1
+print('There were', count, 'subject lines in', fname)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 7: Gestione errori con try, except e open (search7.py)
+# Fonte: http://www.py4e.com/code3/search7.py
+# ------------------------------------------------------------------------------
+fname = input('Enter the file name: ')
+try:
+    fhand = open(fname)
+except:
+    print('File cannot be opened:', fname)
+    exit()
+
+count = 0
+for line in fhand:
+    if line.startswith('Subject:'):
+        count = count + 1
+print('There were', count, 'subject lines in', fname)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 7: Scrivere su file
+# ------------------------------------------------------------------------------
+fout = open('output.txt', 'w')
+print(fout)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 8: Liste (join, split e parsing di righe - search5.py)
+# Fonte: http://www.py4e.com/code3/search5.py
+# ------------------------------------------------------------------------------
+t = ['pining', 'for', 'the', 'fjords']
+delimiter = ' '
+print(delimiter.join(t))
+
+fhand = open('mbox-short.txt')
+for line in fhand:
+    line = line.rstrip()
+    if not line.startswith('From '):
+        continue
+    words = line.split()
+    print(words[2])
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 8: Pattern Guardian per evitare IndexError durante il parsing
+# ------------------------------------------------------------------------------
+fhand = open('mbox-short.txt')
+count = 0
+for line in fhand:
+    words = line.split()
+    # print('Debug:', words)
+    if len(words) == 0:
+        continue
+    if words[0] != 'From':
+        continue
+    print(words[2])
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 9: Dizionari e file (count1.py)
+# Contare la frequenza delle parole in un file
+# Fonte: http://www.py4e.com/code3/count1.py
+# ------------------------------------------------------------------------------
+fname = input('Enter the file name: ')
+try:
+    fhand = open(fname)
+except:
+    print('File cannot be opened:', fname)
+    exit()
+
+counts = dict()
+for line in fhand:
+    words = line.split()
+    for word in words:
+        if word not in counts:
+            counts[word] = 1
+        else:
+            counts[word] += 1
+
+print(counts)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 9: Iterare e ordinare le chiavi di un dizionario
+# ------------------------------------------------------------------------------
+counts = {'chuck': 1, 'annie': 42, 'jan': 100}
+lst = list(counts.keys())
+print(lst)
+lst.sort()
+for key in lst:
+    print(key, counts[key])
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 10: Tuple e ordinamento di dizionari per valore (count3.py)
+# Rimozione punteggiatura con translate() e top 10 parole più frequenti
+# Fonte: http://www.py4e.com/code3/count3.py
+# ------------------------------------------------------------------------------
+import string
+
+fhand = open('romeo-full.txt')
+counts = dict()
+for line in fhand:
+    line = line.translate(str.maketrans('', '', string.punctuation))
+    line = line.lower()
+    words = line.split()
+    for word in words:
+        if word not in counts:
+            counts[word] = 1
+        else:
+            counts[word] += 1
+
+# Sort the dictionary by value
+lst = list()
+for key, val in list(counts.items()):
+    lst.append((val, key))
+
+lst.sort(reverse=True)
+
+for key, val in lst[:10]:
+    print(key, val)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 11: Espressioni Regolari (re05.py & esercizi)
+# Fonte: http://www.py4e.com/code3/re05.py
+# ------------------------------------------------------------------------------
+import re
+
+s = 'A message from csev@umich.edu to cwen@iupui.edu about meeting @2PM'
+lst = re.findall(r'\S+@\S+', s)
+print(lst)
+
+# Esercizio 1 Cap. 11: Simulazione comando grep
+regex = input('Enter a regular expression: ')
+fhand = open('mbox.txt')
+count = 0
+for line in fhand:
+    line = line.rstrip()
+    if re.search(regex, line):
+        count = count + 1
+print('mbox.txt had', count, 'lines that matched', regex)
+
+# Esercizio 2 Cap. 11: Estrarre numeri da "New Revision: ..." e calcolare la media
+fname = input('Enter file: ')
+try:
+    fhand = open(fname)
+except:
+    print('File cannot be opened:', fname)
+    exit()
+
+numeri = list()
+for line in fhand:
+    line = line.rstrip()
+    x = re.findall(r'^New Revision: ([0-9]+)', line)
+    if len(x) > 0:
+        valore = float(x[0])
+        numeri.append(valore)
+
+if len(numeri) > 0:
+    media = sum(numeri) / len(numeri)
+    print(int(media))
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 12: Programmi di Rete - Il browser web più semplice del mondo (socket1.py)
+# Fonte: http://www.py4e.com/code3/socket1.py
+# ------------------------------------------------------------------------------
+import socket
+
+mysock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+mysock.connect(('data.pr4e.org', 80))
+cmd = 'GET http://data.pr4e.org/romeo.txt HTTP/1.0
+
+'.encode()
+mysock.send(cmd)
+
+while True:
+    data = mysock.recv(512)
+    if len(data) < 1:
+        break
+    print(data.decode(), end='')
+
+mysock.close()
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 12: Recuperare pagine web con urllib (urllib1.py)
+# Fonte: http://www.py4e.com/code3/urllib1.py
+# ------------------------------------------------------------------------------
+import urllib.request
+
+fhand = urllib.request.urlopen('http://data.pr4e.org/romeo.txt')
+for line in fhand:
+    print(line.decode().strip())
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 12: Contare le parole in una pagina web con urllib (urlwords.py)
+# Fonte: http://www.py4e.com/code3/urlwords.py
+# ------------------------------------------------------------------------------
+import urllib.request, urllib.parse, urllib.error
+
+fhand = urllib.request.urlopen('http://data.pr4e.org/romeo.txt')
+counts = dict()
+for line in fhand:
+    words = line.decode().split()
+    for word in words:
+        counts[word] = counts.get(word, 0) + 1
+print(counts)
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 12: Scaricare file binari (immagini) con urllib (curl1.py)
+# Fonte: http://www.py4e.com/code3/curl1.py
+# ------------------------------------------------------------------------------
+import urllib.request, urllib.parse, urllib.error
+
+img = urllib.request.urlopen('http://data.pr4e.org/cover3.jpg').read()
+fhand = open('cover3.jpg', 'wb')
+fhand.write(img)
+fhand.close()
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 12: Scaricare file binari a blocchi / buffer (curl2.py)
+# Fonte: http://www.py4e.com/code3/curl2.py
+# ------------------------------------------------------------------------------
+import urllib.request, urllib.parse, urllib.error
+
+img = urllib.request.urlopen('http://data.pr4e.org/cover3.jpg')
+fhand = open('cover3.jpg', 'wb')
+size = 0
+while True:
+    info = img.read(100000)
+    if len(info) < 1:
+        break
+    size = size + len(info)
+    fhand.write(info)
+
+print(size, 'characters copied.')
+fhand.close()
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 12: Parsing HTML con BeautifulSoup (urllinks.py)
+# Fonte: http://www.py4e.com/code3/urllinks.py
+# ------------------------------------------------------------------------------
+import urllib.request, urllib.parse, urllib.error
+from bs4 import BeautifulSoup
+import ssl
+
+# Ignore SSL certificate errors
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
+url = input('Enter - ')
+html = urllib.request.urlopen(url, context=ctx).read()
+soup = BeautifulSoup(html, 'html.parser')
+
+# Retrieve all of the anchor tags
+tags = soup('a')
+for tag in tags:
+    print(tag.get('href', None))
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 13: Web Services e JSON (frammento interrogazione API / geocoding)
+# ------------------------------------------------------------------------------
+import urllib.request, urllib.parse, urllib.error
+import json
+import ssl
+
+api_key = False
+serviceurl = 'http://py4e-data.dr-chuck.net/json?'
+
+# Ignore SSL certificate errors
+ctx = ssl.create_default_context()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
+
+while True:
+    address = input('Enter location: ')
+    if len(address) < 1:
+        break
+
+    parms = dict()
+    parms['address'] = address
+    if api_key is not False:
+        parms['key'] = api_key
+    url = serviceurl + urllib.parse.urlencode(parms)
+
+    print('Retrieving', url)
+    uh = urllib.request.urlopen(url, context=ctx)
+    data = uh.read().decode()
+    print('Retrieved', len(data), 'characters')
+
+    try:
+        js = json.loads(data)
+    except:
+        js = None
+
+
+# ------------------------------------------------------------------------------
+# CAPITOLO 14: Programmazione Orientata agli Oggetti - Esempio base (elev.py)
+# Fonte: http://www.py4e.com/code3/elev.py
+# ------------------------------------------------------------------------------
+usf = input('Enter the US Floor Number: ')
+wf = int(usf) - 1
+print('Non-US Floor Number is', wf)
